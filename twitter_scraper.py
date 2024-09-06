@@ -54,7 +54,7 @@ def extraer_tweets(driver, cuenta):
     """
     Extrae tweets recientes de la cuenta de Twitter especificada.
 
-    Argumentoss:
+    Argumentos:
         driver (webdriver.Chrome): Instancia del controlador del navegador.
         cuenta (str): Nombre de usuario de Twitter (sin @) de la cuenta de la cual extraer tweets.
 
@@ -73,15 +73,18 @@ def extraer_tweets(driver, cuenta):
         
         for tweet in tweet_elements:
             try:
-                # Extraer los detalles del tweet, junto con un aviso de error
-                texto = tweet.find_element(By.XPATH, './/div[2]//div[2]//div[1]').text
-                fecha = tweet.find_element(By.XPATH, './/time').get_attribute('datetime')
-                retweets = tweet.find_element(By.XPATH, './/div[2]//div[2]//div[2]//div[1]//div[1]').text
-                likes = tweet.find_element(By.XPATH, './/div[2]//div[2]//div[2]//div[1]//div[2]').text
-                url = tweet.find_element(By.XPATH, './/a').get_attribute('href')
+                # Extraer los detalles del tweet utilizando selectores más robustos
+                texto = tweet.find_element(By.XPATH, './/div[@data-testid="tweetText"]').text  # Utiliza data-testid para localizar el texto del tweet
+                fecha = tweet.find_element(By.XPATH, './/time').get_attribute('datetime')  # Extrae la fecha y hora de publicación
+                detalles = tweet.find_elements(By.XPATH, './/div[@data-testid="like"]//following-sibling::div')  # Extrae retweets y likes de los elementos de datos
+                retweets = detalles[0].text if len(detalles) > 0 else "0"  # Comprueba si hay retweets
+                likes = detalles[1].text if len(detalles) > 1 else "0"  # Comprueba si hay likes
+                url = tweet.find_element(By.XPATH, './/a').get_attribute('href')  # Obtiene la URL del tweet
+
+                # Almacena los datos extraídos en la lista de tweets
                 tweets.append({"Texto": texto, "Fecha": fecha, "Retweets": retweets, "Likes": likes, "URL": url})
             except Exception as e:
-                print(f"Error al extraer información del tweet: {e}")
+                print(f"Error al extraer información del tweet: {e}")  # Manejo de errores para continuar el proceso
                 continue
 
     return tweets
@@ -118,7 +121,7 @@ def main():
         print("Error: Credenciales de Twitter no configuradas correctamente. Revisa las variables de entorno.")
         exit(1)
 
-    cuenta = "ABCDigital"  # En mi caso,elegi guardar los tweets de ABC Color en su twitter.
+    cuenta = "ABCDigital"  # En mi caso, elegí guardar los tweets de ABC Color en su Twitter.
 
     driver = configurar_navegador()
     iniciar_sesion(driver, usuario, contrasena)
