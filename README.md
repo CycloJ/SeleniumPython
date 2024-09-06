@@ -11,24 +11,27 @@ Para ejecutar el script correctamente, se requiere la instalación de ciertas de
 
   Clonación del Repositorio:
 Clone el repositorio en su máquina local utilizando el siguiente comando:
+
     git clone https://github.com/tu_usuario/TwitterScraper.git
     cd TwitterScraper
     
 Creación y Activación del Entorno Virtual:
 Es recomendable crear un entorno virtual para aislar las dependencias del proyecto. Para ello, siga los pasos correspondientes a su sistema operativo:
 En Windows:
+
     python -m venv venv
     .\venv\Scripts\activate
 
 Instalación de Dependencias Requeridas:
 Con el entorno virtual activado, instale las dependencias necesarias ejecutando el siguiente comando:
+
     pip install -r requirements.txt
 Asegúrese de que el archivo requirements.txt contenga las siguientes bibliotecas:
 
-selenium
-webdriver_manager
-pandas
-python-dotenv
+    selenium
+    webdriver_manager
+    pandas
+    python-dotenv
 
   Configuración de las Credenciales de Twitter:
 El script requiere credenciales de Twitter para iniciar sesión y extraer tweets. Configure las credenciales como variables de entorno siguiendo las instrucciones a continuación:
